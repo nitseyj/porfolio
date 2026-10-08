@@ -110,7 +110,7 @@ section[id]{scroll-margin-top:calc(var(--nav-h) + 24px)}
 .menu .theme{align-self:flex-start;margin-top:24px;padding-inline:0}
 
 /* hero */
-.hero{position:relative;min-height:100dvh;display:flex;align-items:flex-end;padding:calc(var(--nav-h) + 48px) 0 104px;isolation:isolate;overflow:hidden}
+.hero{position:relative;min-height:100dvh;display:flex;align-items:flex-end;padding:calc(var(--nav-h) + 48px) 0 72px;isolation:isolate;overflow:hidden}
 .hero canvas{position:absolute;inset:0;width:100%;height:100%;z-index:-1}
 .hero::before{content:"";position:absolute;inset:-20%;z-index:-2;background:
   radial-gradient(40% 50% at 78% 28%,var(--glow),transparent 70%),
@@ -124,6 +124,11 @@ section[id]{scroll-margin-top:calc(var(--nav-h) + 24px)}
 .tags{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
 .tags li{display:inline-flex;align-items:center;gap:10px;padding:10px 18px 10px 14px;border-radius:999px;border:1px solid var(--btn-line);background:var(--surface-2);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);font:600 16px/1.2 var(--body);color:var(--ink)}
 .tags svg{width:18px;height:18px;flex:none;color:var(--accent)}
+.tags .tag-act{padding:0;border:0;background:none;backdrop-filter:none;-webkit-backdrop-filter:none}
+.tags .tag-act button{display:inline-flex;align-items:center;gap:10px;padding:10px 10px 10px 14px;border-radius:999px;border:1px solid var(--btn-line);background:var(--surface-2);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);font:600 16px/1.2 var(--body);color:var(--ink);cursor:pointer;transition:border-color .3s,background-color .3s,transform .2s var(--ease)}
+.tags .tag-act button:hover{border-color:var(--accent)}
+.tags .tag-act button:active{transform:scale(.97)}
+.tags .hint{font-size:12px;padding:3px 9px;border-radius:999px;background:var(--accent);color:var(--accent-ink);font-weight:600}
 .intro .dot{width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 6px var(--glow);animation:pulse 2.4s var(--ease) infinite}
 @keyframes pulse{50%{box-shadow:0 0 0 12px transparent}}
 .hero h1{font-size:clamp(44px,7vw,108px);line-height:.98;max-width:15ch;letter-spacing:-.025em}
@@ -141,12 +146,17 @@ section[id]{scroll-margin-top:calc(var(--nav-h) + 24px)}
 .hero-foot p strong{color:var(--ink);font-weight:700}
 .ctas{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
 /* scroll cue: an outlined "mouse" with a moving accent dot; clickable, but quieter than the CTAs */
-.scroll-cue{position:absolute;left:50%;bottom:28px;transform:translateX(-50%);display:flex;align-items:center;gap:12px;color:var(--ink);font-size:12px;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;opacity:.85;transition:opacity .3s}
+.scroll-cue{position:absolute;right:28px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;align-items:center;gap:14px;color:var(--ink);font-size:12px;letter-spacing:.22em;text-transform:uppercase;text-decoration:none;opacity:.85;transition:opacity .4s}
 .scroll-cue:hover{opacity:1}
+.scroll-cue.gone{opacity:0;pointer-events:none}
+.scroll-cue .label{writing-mode:vertical-rl}
 .scroll-cue .mouse{position:relative;width:26px;height:42px;border-radius:999px;border:1.5px solid var(--btn-line);transition:border-color .3s}
-.scroll-cue:hover .mouse{border-color:var(--ink)}
+.scroll-cue:hover .mouse{border-color:var(--accent)}
 .scroll-cue .mouse::after{content:"";position:absolute;left:50%;top:8px;width:4px;height:8px;margin-left:-2px;border-radius:2px;background:var(--accent);animation:wheel 1.8s var(--ease) infinite}
 @keyframes wheel{0%{transform:translateY(0);opacity:1}70%{transform:translateY(12px);opacity:0}100%{transform:translateY(0);opacity:0}}
+.scroll-cue .rail{position:relative;width:2px;height:72px;border-radius:2px;background:var(--faint);overflow:hidden}
+.scroll-cue .rail::after{content:"";position:absolute;left:0;top:0;width:100%;height:40%;background:linear-gradient(transparent,var(--accent));animation:rail 1.8s var(--ease) infinite}
+@keyframes rail{from{transform:translateY(-100%)}to{transform:translateY(250%)}}
 
 /* chapters */
 .chapter{padding-block:clamp(110px,16vw,200px)}
@@ -277,7 +287,7 @@ section[id]{scroll-margin-top:calc(var(--nav-h) + 24px)}
 .marquee span:nth-child(3n+1){color:var(--ink);-webkit-text-stroke:0}
 .marquee:hover .track{animation-play-state:paused}
 @keyframes marq{to{transform:translateX(-50%)}}
-.acc{display:flex;gap:10px;height:440px}
+.acc{display:flex;gap:10px;height:500px}
 .panel{position:relative;flex:1;min-width:0;border-radius:var(--r-lg);background:var(--surface);border:1px solid var(--line);overflow:hidden;transition:flex-grow .7s var(--ease),background-color .4s;cursor:pointer;isolation:isolate}
 .panel.open{flex-grow:4.2;background:var(--bg-2);cursor:default}
 .panel button.ph{position:absolute;inset:0;border:0;background:none;padding:24px;text-align:left;cursor:inherit;display:flex;flex-direction:column;justify-content:space-between;width:100%}
@@ -286,11 +296,20 @@ section[id]{scroll-margin-top:calc(var(--nav-h) + 24px)}
 .panel.open .vt{opacity:0}
 .panel .pc{position:absolute;left:28px;right:28px;bottom:28px;opacity:0;transform:translateY(16px);transition:opacity .4s var(--ease),transform .5s var(--ease);pointer-events:none}
 .panel.open .pc{opacity:1;transform:none;transition-delay:.25s;pointer-events:auto}
-.panel .pc h3{font-size:clamp(30px,3vw,44px);margin-bottom:18px}
+.panel .pc h3{font-size:clamp(30px,3vw,44px);margin-bottom:12px}
+.panel .count{display:block;color:var(--accent);margin-bottom:10px}
+.panel .desc{color:var(--muted);font-size:16px;max-width:42ch;margin-bottom:20px}
+.panel .used{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 10px;margin-top:22px;padding-top:16px;border-top:1px solid var(--line);color:var(--muted)}
+.panel .used span{color:var(--muted);margin-right:4px}
+.panel .used .tlink{font-size:14px}
 .panel .pc ul{display:flex;flex-wrap:wrap;gap:8px}
 .panel .pc li{padding:8px 14px;border-radius:999px;border:1px solid var(--line);font-size:15px;background:var(--surface)}
-.panel .glyph{position:absolute;right:-30px;top:-30px;width:220px;height:220px;opacity:0;transition:opacity .6s;z-index:-1}
-.panel.open .glyph{opacity:1}
+.panel .glyph{position:absolute;right:28px;top:28px;width:150px;height:150px;opacity:0;transform:scale(.85) rotate(-6deg);transition:opacity .6s,transform .8s var(--ease);z-index:-1;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.panel.open .glyph{opacity:1;transform:none;transition-delay:.15s}
+.glyph .g-line{stroke:var(--faint)}
+.glyph .g-box{stroke:var(--faint);fill:var(--surface)}
+.glyph .g-acc{stroke:var(--accent)}
+.glyph .g-acc-fill{fill:var(--accent);stroke:none;opacity:.85}
 
 /* background: education + certs */
 .bg-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:56px}
@@ -338,13 +357,13 @@ footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;paddin
   .nav{gap:10px}
   .hero-foot{grid-template-columns:minmax(0,1fr)}
   .scroll-cue{display:none}
-  .hero{padding-bottom:72px}
   .acc{flex-direction:column;height:auto}
   .panel,.panel.open{flex:none;background:var(--surface)}
   .panel button.ph{position:static;padding:24px 24px 0;pointer-events:none}
   .panel .vt{writing-mode:horizontal-tb;transform:none;opacity:1!important;margin-top:10px}
   .panel .pc{position:static;opacity:1;transform:none;padding:16px 24px 24px;pointer-events:auto}
   .panel .pc h3{display:none}
+  .panel .glyph{display:none}
   .acc-hint{display:none}
   .bg-grid{grid-template-columns:minmax(0,1fr)}
   .statement-grid{grid-template-columns:minmax(0,1fr);gap:24px}
@@ -402,6 +421,7 @@ footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;paddin
         <ul class="tags">
           <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>Business Intelligence &amp; Analytics</li>
           <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12Z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/><circle cx="12" cy="10" r="2.6" fill="currentColor"/></svg>Shah Alam, Malaysia</li>
+          <li class="tag-act"><button type="button" data-copy="justinhyphoo@gmail.com" aria-label="Copy email address justinhyphoo@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="m4 7 8 6 8-6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>justinhyphoo@gmail.com<span class="hint mono" aria-live="polite">Copy</span></button></li>
         </ul>
       </div>
       <h1 id="headline">I turn messy data into <span class="spark" aria-hidden="true"><svg viewBox="0 0 100 40" preserveAspectRatio="none"><polyline points="8,26 22,24 34,27 46,22 58,25 68,8 78,24 92,21"/><circle cx="68" cy="8" r="4.5"/></svg></span> reports people <em>act on.</em></h1>
@@ -414,7 +434,7 @@ footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;paddin
         </div>
       </div>
     </div>
-    <a class="scroll-cue mono" href="#approach" aria-label="Scroll to the next section"><span class="mouse" aria-hidden="true"></span><span aria-hidden="true">Scroll</span></a>
+    <a class="scroll-cue mono" href="#approach" aria-label="Scroll to the next section"><span class="label" aria-hidden="true">Scroll</span><span class="mouse" aria-hidden="true"></span><span class="rail" aria-hidden="true"></span></a>
   </header>
 
   <section class="chapter statement" id="approach" aria-label="Approach">
@@ -478,8 +498,8 @@ footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;paddin
   <section class="chapter" id="work" aria-labelledby="work-h" style="padding-top:0">
     <div class="wrap work">
       <aside class="work-side">
-        <h2 id="work-h">Selected work</h2>
-        <p>Data pipelines and BI first, then the tools I built along the way.</p>
+        <h2 id="work-h">Featured projects</h2>
+        <p>Four projects across data engineering, analytics and software development, each built from start to finish.</p>
         <div class="counter" aria-hidden="true"><b id="count">01</b><span>/ 04</span></div>
         <nav class="work-index" aria-label="Projects">
           <a href="#p-elt">Retail ELT pipeline</a>
@@ -615,22 +635,28 @@ footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;paddin
     <div class="marquee rev" aria-hidden="true"><div class="track"></div></div>
     <div class="wrap">
       <div class="chapter-head">
-        <h2 id="skills-h">The toolkit</h2>
+        <h2 id="skills-h">Skills &amp; tools</h2>
         <p class="acc-hint">Hover or select a column to open it.</p>
       </div>
       <div class="acc" id="acc">
         <div class="panel open"><button class="ph" type="button" aria-expanded="true"><span class="num mono">BI</span><span class="vt">BI &amp; analytics</span></button>
-          <div class="pc"><h3>BI &amp; analytics</h3><ul><li>Power BI</li><li>DAX</li><li>Power Query</li><li>Data modelling</li><li>Data visualisation</li></ul></div></div>
+          <svg class="glyph" viewBox="0 0 160 160" aria-hidden="true"><path class="g-line" d="M20 140H140"/><rect class="g-box" x="28" y="96" width="18" height="44" rx="3"/><rect class="g-box" x="56" y="78" width="18" height="62" rx="3"/><rect class="g-acc-fill" x="84" y="50" width="18" height="90" rx="3"/><rect class="g-box" x="112" y="70" width="18" height="70" rx="3"/><polyline class="g-acc" points="24,84 64,62 92,32 132,50"/></svg>
+          <div class="pc"><span class="count mono">05 skills</span><h3>BI &amp; analytics</h3><p class="desc">Turning raw tables into data models, measures and reports that answer a real business question.</p><ul><li>Power BI</li><li>DAX</li><li>Power Query</li><li>Data modelling</li><li>Data visualisation</li></ul><p class="used mono"><span>Used in</span> <a class="tlink" href="#p-elt">Retail ELT</a> · <a class="tlink" href="#p-anomaly">Anomaly Hunt</a></p></div></div>
         <div class="panel"><button class="ph" type="button" aria-expanded="false"><span class="num mono">Code</span><span class="vt">Programming</span></button>
-          <div class="pc"><h3>Programming</h3><ul><li>Python</li><li>JavaScript</li><li>Node.js</li><li>React</li><li>PHP</li><li>Java</li></ul></div></div>
+          <svg class="glyph" viewBox="0 0 160 160" aria-hidden="true"><polyline class="g-line" points="56,46 22,80 56,114"/><polyline class="g-line" points="104,46 138,80 104,114"/><line class="g-acc" x1="92" y1="34" x2="68" y2="126"/></svg>
+          <div class="pc"><span class="count mono">06 skills</span><h3>Programming</h3><p class="desc">Writing the apps, APIs and bots behind my projects.</p><ul><li>Python</li><li>JavaScript</li><li>Node.js</li><li>React</li><li>PHP</li><li>Java</li></ul><p class="used mono"><span>Used in</span> <a class="tlink" href="#p-valorant">Valorant Analyst</a> · <a class="tlink" href="#p-wwmg">WWMG</a> · <a class="tlink" href="#p-anomaly">Anomaly Hunt</a></p></div></div>
         <div class="panel"><button class="ph" type="button" aria-expanded="false"><span class="num mono">Data</span><span class="vt">Databases</span></button>
-          <div class="pc"><h3>Databases</h3><ul><li>PostgreSQL</li><li>MySQL</li><li>SQLite</li><li>T-SQL</li></ul></div></div>
+          <svg class="glyph" viewBox="0 0 160 160" aria-hidden="true"><ellipse class="g-acc" cx="80" cy="40" rx="48" ry="14"/><path class="g-line" d="M32 40V120c0 8 21 14 48 14s48-6 48-14V40"/><path class="g-line" d="M32 80c0 8 21 14 48 14s48-6 48-14"/></svg>
+          <div class="pc"><span class="count mono">04 skills</span><h3>Databases</h3><p class="desc">Designing schemas and writing queries that keep data clean and consistent.</p><ul><li>PostgreSQL</li><li>MySQL</li><li>SQLite</li><li>T-SQL</li></ul><p class="used mono"><span>Used in</span> <a class="tlink" href="#p-elt">Retail ELT</a> · <a class="tlink" href="#p-wwmg">WWMG</a></p></div></div>
         <div class="panel"><button class="ph" type="button" aria-expanded="false"><span class="num mono">Dev</span><span class="vt">Development</span></button>
-          <div class="pc"><h3>Development</h3><ul><li>REST APIs</li><li>ETL/ELT</li><li>Git</li><li>GitHub</li></ul></div></div>
+          <svg class="glyph" viewBox="0 0 160 160" aria-hidden="true"><circle class="g-line" cx="40" cy="40" r="10"/><circle class="g-line" cx="40" cy="120" r="10"/><circle class="g-acc" cx="120" cy="64" r="10"/><path class="g-line" d="M40 50V110"/><path class="g-acc" d="M40 92c0-20 20-28 70-28"/></svg>
+          <div class="pc"><span class="count mono">04 skills</span><h3>Development</h3><p class="desc">Building pipelines and APIs, with every change tracked in version control.</p><ul><li>REST APIs</li><li>ETL/ELT</li><li>Git</li><li>GitHub</li></ul><p class="used mono"><span>Used in</span> <a class="tlink" href="#p-elt">Retail ELT</a> · <a class="tlink" href="#p-valorant">Valorant Analyst</a></p></div></div>
         <div class="panel"><button class="ph" type="button" aria-expanded="false"><span class="num mono">AI</span><span class="vt">AI</span></button>
-          <div class="pc"><h3>AI</h3><ul><li>Generative AI</li><li>Prompt engineering</li><li>AI automation</li><li>AI-assisted development</li></ul></div></div>
+          <svg class="glyph" viewBox="0 0 160 160" aria-hidden="true"><path class="g-acc" d="M80 22l12 34 34 12-34 12-12 34-12-34-34-12 34-12z"/><path class="g-line" d="M124 104l5 14 14 5-14 5-5 14-5-14-14-5 14-5z"/><path class="g-line" d="M36 104l4 10 10 4-10 4-4 10-4-10-10-4 10-4z"/></svg>
+          <div class="pc"><span class="count mono">04 skills</span><h3>AI</h3><p class="desc">Using AI tools to build faster and automate repetitive work.</p><ul><li>Generative AI</li><li>Prompt engineering</li><li>AI automation</li><li>AI-assisted development</li></ul><p class="used mono"><span>Used in</span> <a class="tlink" href="#p-wwmg">WWMG</a> · <a class="tlink" href="#p-anomaly">Anomaly Hunt</a> · <a class="tlink" href="#p-valorant">Valorant Analyst</a></p></div></div>
         <div class="panel"><button class="ph" type="button" aria-expanded="false"><span class="num mono">Lang</span><span class="vt">Languages</span></button>
-          <div class="pc"><h3>Languages</h3><ul><li>English</li><li>Bahasa Malaysia</li><li>Mandarin</li><li>Cantonese</li><li>Thai</li></ul></div></div>
+          <svg class="glyph" viewBox="0 0 160 160" aria-hidden="true"><rect class="g-line" x="18" y="30" width="78" height="54" rx="12"/><path class="g-line" d="M38 84l-6 18 22-18"/><rect class="g-acc" x="64" y="70" width="78" height="54" rx="12"/><path class="g-acc" d="M122 124l6 18-22-18"/></svg>
+          <div class="pc"><span class="count mono">05 languages</span><h3>Languages</h3><p class="desc">Languages I speak and work in, useful for teams and clients across the region.</p><ul><li>English</li><li>Bahasa Malaysia</li><li>Mandarin</li><li>Cantonese</li><li>Thai</li></ul></div></div>
       </div>
     </div>
   </section>
@@ -664,7 +690,7 @@ footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;paddin
     <div class="wrap">
       <div class="contact" id="contact-box">
         <h2 class="big" id="contact-h">Let’s talk <em>data.</em></h2>
-        <p>I’m happy to talk about BI work, data projects, or any of the tools above.</p>
+        <p>I’m open to BI and data analytics roles, graduate opportunities and project collaborations. If you’re hiring or have a project in mind, I’d love to hear from you.</p>
         <div class="mail">
           <code id="email">justinhyphoo@gmail.com</code>
           <button class="btn primary magnetic" id="copy" type="button">Copy email</button>
@@ -948,6 +974,17 @@ footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;paddin
     function sel(){var r=document.createRange();r.selectNodeContents(t);var g=getSelection();g.removeAllRanges();g.addRange(r);b.textContent='Selected, press Ctrl+C'}
     b.addEventListener('click',function(){
       try{navigator.clipboard.writeText(t.textContent).then(function(){b.textContent='Copied';setTimeout(function(){b.textContent='Copy email'},2200)},sel)}catch(e){sel()}
+    });
+    // hide the scroll cue once the visitor starts scrolling
+    var cue=$('.scroll-cue');
+    if(cue){var onS=function(){cue.classList.toggle('gone',scrollY>80)};addEventListener('scroll',onS,{passive:true});onS()}
+    // hero email badge: copy, or fall back to opening the mail app
+    $$('[data-copy]').forEach(function(btn){
+      var hint=$('.hint',btn),addr=btn.getAttribute('data-copy');
+      function mail(){location.href='mailto:'+addr}
+      btn.addEventListener('click',function(){
+        try{navigator.clipboard.writeText(addr).then(function(){hint.textContent='Copied ✓';setTimeout(function(){hint.textContent='Copy'},2200)},mail)}catch(e){mail()}
+      });
     });
   })();
 
