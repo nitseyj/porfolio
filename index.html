@@ -10,6 +10,14 @@
 <meta property="og:title" content="Justin Phoo Hoe Yin · Business Intelligence & Analytics">
 <meta property="og:description" content="Power BI, SQL and ELT pipelines, plus software built with AI coding tools.">
 <meta property="og:url" content="https://nitseyj.github.io/portfolio/">
+<meta property="og:image" content="https://nitseyj.github.io/portfolio/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Justin Phoo Hoe Yin, Business Intelligence and Analytics. I turn messy data into reports people act on.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Justin Phoo Hoe Yin · Business Intelligence & Analytics">
+<meta name="twitter:description" content="Power BI, SQL and ELT pipelines, plus software built with AI coding tools.">
+<meta name="twitter:image" content="https://nitseyj.github.io/portfolio/og-image.png">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230a0d12'/%3E%3Cpolyline points='5,21 10,18 14,20 18,8 22,19 27,16' fill='none' stroke='%23c8f169' stroke-width='2.4' stroke-linejoin='round' stroke-linecap='round'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -26,7 +34,8 @@
   --mono:"Geist Mono",ui-monospace,Menlo,Consolas,monospace;
   --nav-h:64px; --r-lg:28px; --r-md:18px; --r-sm:10px;
   --ease:cubic-bezier(.22,1,.36,1);
-  --z-canvas:0; --z-content:1; --z-nav:50; --z-menu:60; --z-grain:70; --z-progress:80;
+  /* nav sits above the mobile menu so its Close button stays visible */
+  --z-canvas:0; --z-content:1; --z-menu:40; --z-nav:50; --z-grain:70; --z-progress:80;
   color-scheme:light;
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
@@ -100,14 +109,17 @@ section[id]{scroll-margin-top:calc(var(--nav-h) + 24px)}
 .nav-links a{position:relative;z-index:1;display:block;padding:10px 14px;border-radius:999px;font:500 14px var(--body);text-decoration:none;color:var(--muted);transition:color .3s}
 .nav-links a:hover,.nav-links a.active{color:var(--ink)}
 .nav-pill{position:absolute;top:0;bottom:0;left:0;width:0;border-radius:999px;background:var(--surface);border:1px solid var(--line);opacity:0;transition:transform .5s var(--ease),width .5s var(--ease),opacity .3s}
-.theme{border:0;background:none;padding:10px 14px;border-radius:999px;font:500 13px var(--mono);color:var(--muted);cursor:pointer;white-space:nowrap}
-.theme:hover{color:var(--ink);background:var(--surface)}
+.tgl{border:0;background:none;padding:10px 14px;border-radius:999px;font:500 13px var(--mono);color:var(--muted);cursor:pointer;white-space:nowrap}
+.tgl:hover{color:var(--ink);background:var(--surface)}
+/* motion toggle: freeze every looping CSS animation (canvases and JS loops check the same class) */
+.motion-off *,.motion-off *::before,.motion-off *::after{animation-play-state:paused!important}
 .menu-btn{display:none;border:0;background:var(--ink);color:var(--bg);padding:12px 18px;border-radius:999px;font:700 14px var(--body);cursor:pointer}
 .menu{position:fixed;inset:0;overscroll-behavior:contain;z-index:var(--z-menu);background:var(--bg);display:flex;flex-direction:column;justify-content:center;gap:8px;padding:96px 24px 40px;visibility:hidden;opacity:0;transition:opacity .35s var(--ease),visibility .35s}
 .menu.open{visibility:visible;opacity:1}
 .menu a{font:600 clamp(40px,12vw,72px)/1.05 var(--display);letter-spacing:-.015em;text-decoration:none}
 .menu a:hover{color:var(--accent)}
-.menu .theme{align-self:flex-start;margin-top:24px;padding-inline:0}
+.menu .tgl{align-self:flex-start;padding-inline:0}
+.menu .tgl:first-of-type{margin-top:24px}
 
 /* hero */
 .hero{position:relative;min-height:100dvh;display:flex;align-items:flex-end;padding:calc(var(--nav-h) + 48px) 0 72px;isolation:isolate;overflow:hidden}
@@ -248,6 +260,7 @@ section[id]{scroll-margin-top:calc(var(--nav-h) + 24px)}
 .cards{display:flex;flex-direction:column;gap:40px}
 .pcard{position:sticky;top:calc(var(--nav-h) + 40px + var(--i) * 14px);border-radius:var(--r-lg);background:var(--bg-2);border:1px solid var(--line);
   box-shadow:0 30px 60px -30px var(--shadow);overflow:hidden;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);min-height:min(560px,calc(100dvh - var(--nav-h) - 100px));transform-origin:50% 0;isolation:isolate}
+.pcard-dim{position:absolute;inset:0;z-index:2;background:#000;opacity:0;pointer-events:none}
 .pcard .info{padding:36px;display:flex;flex-direction:column;gap:16px}
 .pcard .kicker{color:var(--muted)}
 .pcard h3{font-size:clamp(30px,3.2vw,46px)}
@@ -287,7 +300,7 @@ section[id]{scroll-margin-top:calc(var(--nav-h) + 24px)}
 .marquee span:nth-child(3n+1){color:var(--ink);-webkit-text-stroke:0}
 .marquee:hover .track{animation-play-state:paused}
 @keyframes marq{to{transform:translateX(-50%)}}
-.acc{display:flex;gap:10px;height:500px}
+.acc{display:flex;gap:10px;height:500px;container-type:inline-size}
 .panel{position:relative;flex:1;min-width:0;border-radius:var(--r-lg);background:var(--surface);border:1px solid var(--line);overflow:hidden;transition:flex-grow .7s var(--ease),background-color .4s;cursor:pointer;isolation:isolate}
 .panel.open{flex-grow:4.2;background:var(--bg-2);cursor:default}
 .panel button.ph{position:absolute;inset:0;border:0;background:none;padding:24px;text-align:left;cursor:inherit;display:flex;flex-direction:column;justify-content:space-between;width:100%}
@@ -296,6 +309,9 @@ section[id]{scroll-margin-top:calc(var(--nav-h) + 24px)}
 .panel.open .vt{opacity:0}
 .panel .pc{position:absolute;left:28px;right:28px;bottom:28px;opacity:0;transform:translateY(16px);transition:opacity .4s var(--ease),transform .5s var(--ease);pointer-events:none}
 .panel.open .pc{opacity:1;transform:none;transition-delay:.25s;pointer-events:auto}
+/* fix the content at the open panel's width (6 panels, 5 gaps, open grows 4.2 of 9.2) so text
+   doesn't re-wrap on every frame while flex-grow animates */
+@supports (width:1cqw){.panel .pc{right:auto;width:calc((100cqw - 62px) * 4.2 / 9.2 - 54px)}}
 .panel .pc h3{font-size:clamp(30px,3vw,44px);margin-bottom:12px}
 .panel .count{display:block;color:var(--accent);margin-bottom:10px}
 .panel .desc{color:var(--muted);font-size:16px;max-width:42ch;margin-bottom:20px}
@@ -333,7 +349,7 @@ section[id]{scroll-margin-top:calc(var(--nav-h) + 24px)}
 .contact{position:relative;text-align:left;isolation:isolate;overflow:hidden;border-radius:var(--r-lg);background:var(--bg-2);border:1px solid var(--line);padding:clamp(32px,6vw,80px)}
 .contact::before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(600px circle at var(--mx,70%) var(--my,30%),var(--glow),transparent 55%)}
 .contact .big{font-size:clamp(52px,10vw,168px);line-height:.95;letter-spacing:-.03em}
-.contact .big em{font-style:normal;color:var(--accent)}
+.contact .big em{display:inline-block;font-style:normal;color:var(--accent)}
 .contact p{color:var(--muted);max-width:46ch;margin-top:28px;font-size:19px}
 .mail{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:40px}
 .mail code{font:500 clamp(16px,2vw,22px) var(--mono);user-select:all;overflow-wrap:anywhere;padding:12px 18px;border-radius:999px;border:1px dashed var(--faint)}
@@ -352,7 +368,7 @@ footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;paddin
   .pcard .visual{order:-1;padding-block:20px}
 }
 @media (max-width:860px){
-  .nav-links,.nav .theme{display:none}
+  .nav-links,.nav .tgl{display:none}
   .menu-btn{display:block}
   .nav{gap:10px}
   .hero-foot{grid-template-columns:minmax(0,1fr)}
@@ -361,7 +377,7 @@ footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;paddin
   .panel,.panel.open{flex:none;background:var(--surface)}
   .panel button.ph{position:static;padding:24px 24px 0;pointer-events:none}
   .panel .vt{writing-mode:horizontal-tb;transform:none;opacity:1!important;margin-top:10px}
-  .panel .pc{position:static;opacity:1;transform:none;padding:16px 24px 24px;pointer-events:auto}
+  .panel .pc{position:static;width:auto;opacity:1;transform:none;padding:16px 24px 24px;pointer-events:auto}
   .panel .pc h3{display:none}
   .panel .glyph{display:none}
   .acc-hint{display:none}
@@ -382,6 +398,7 @@ footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;paddin
   html{scroll-behavior:auto}
   .spark polyline{stroke-dashoffset:0}
   .spark circle{opacity:1}
+  [data-motion-btn]{display:none}
 }
 </style>
 </head>
@@ -399,16 +416,18 @@ footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;paddin
     <a href="#background">Background</a>
     <a href="#contact">Contact</a>
   </div>
-  <button class="theme" type="button" data-theme-btn>Theme: auto</button>
+  <button class="tgl" type="button" data-theme-btn>Theme: auto</button>
+  <button class="tgl" type="button" data-motion-btn>Motion: on</button>
   <button class="menu-btn" type="button" aria-expanded="false" aria-controls="menu">Menu</button>
 </nav>
 
-<div class="menu" id="menu" aria-label="Menu">
+<div class="menu" id="menu" role="dialog" aria-label="Menu">
   <a href="#work">Work</a>
   <a href="#skills">Skills</a>
   <a href="#background">Background</a>
   <a href="#contact">Contact</a>
-  <button class="theme" type="button" data-theme-btn>Theme: auto</button>
+  <button class="tgl" type="button" data-theme-btn>Theme: auto</button>
+  <button class="tgl" type="button" data-motion-btn>Motion: on</button>
 </div>
 
 <main id="main" tabindex="-1">
@@ -668,8 +687,8 @@ footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;paddin
         <div>
           <h3>Education</h3>
           <ol class="edu">
-            <li><span class="yr mono">2023 – 2026</span><b>Bachelor of Information Technology (Honours)</b><span class="muted">Taylor’s University</span><br><span class="gpa">CGPA 3.62</span></li>
-            <li><span class="yr mono">2022 – 2023</span><b>Bachelor of Information Technology (Honours)</b><span class="muted">Unitar International University</span><br><span class="gpa">CGPA 3.63</span></li>
+            <li><span class="yr mono">2023-2026</span><b>Bachelor of Information Technology (Honours)</b><span class="muted">Taylor’s University</span><br><span class="gpa">CGPA 3.62</span></li>
+            <li><span class="yr mono">2022-2023</span><b>Bachelor of Information Technology (Honours)</b><span class="muted">Unitar International University</span><br><span class="gpa">CGPA 3.63</span></li>
           </ol>
         </div>
         <div>
@@ -694,6 +713,7 @@ footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;paddin
         <div class="mail">
           <code id="email">justinhyphoo@gmail.com</code>
           <button class="btn primary magnetic" id="copy" type="button">Copy email</button>
+          <span class="sr-only" id="copy-status" aria-live="polite"></span>
           <a class="btn magnetic" href="https://www.linkedin.com/in/justinphoo/">LinkedIn</a>
           <a class="btn magnetic" href="https://github.com/nitseyj">GitHub</a>
         </div>
@@ -737,6 +757,22 @@ footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;paddin
   matchMedia('(prefers-color-scheme: dark)').addEventListener('change',function(){document.dispatchEvent(new Event('themechange'))});
   applyTheme();
 
+  /* ---------- motion toggle: pauses every looping animation (WCAG 2.2.2) ---------- */
+  var motionOff=false;
+  try{motionOff=localStorage.getItem('motion')==='off'}catch(e){}
+  function applyMotion(){
+    root.classList.toggle('motion-off',motionOff);
+    $$('[data-motion-btn]').forEach(function(b){b.textContent='Motion: '+(motionOff?'off':'on')});
+    $$('svg animate').forEach(function(a){var s=a.ownerSVGElement;if(s&&s.pauseAnimations)motionOff?s.pauseAnimations():s.unpauseAnimations()});
+    document.dispatchEvent(new Event('motionchange'));
+  }
+  $$('[data-motion-btn]').forEach(function(b){b.addEventListener('click',function(){
+    motionOff=!motionOff;
+    try{localStorage.setItem('motion',motionOff?'off':'on')}catch(e){}
+    applyMotion();
+  })});
+  applyMotion();
+
   /* ---------- smooth scroll ---------- */
   var lenis=null;
   if(!reduce&&window.Lenis){
@@ -766,6 +802,8 @@ footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;paddin
   function setMenu(open){
     menu.classList.toggle('open',open);mbtn.setAttribute('aria-expanded',open);mbtn.textContent=open?'Close':'Menu';
     if(lenis){open?lenis.stop():lenis.start()}
+    // keep keyboard focus within the nav and menu while the menu covers the page
+    $('#main').inert=open;
     if(open){var f=$('#menu a');if(f)f.focus({preventScroll:true})}
     if(open&&hasGsap&&!reduce)gsap.fromTo($$('#menu a'),{yPercent:60,opacity:0},{yPercent:0,opacity:1,stagger:.06,duration:.7,ease:'expo.out'});
   }
@@ -778,21 +816,35 @@ footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;paddin
   })});
 
   /* ---------- nav active pill + progress ---------- */
-  var links=$$('.nav-links a'),pill=$('.nav-pill'),bar=$('.progress');
+  var links=$$('.nav-links a'),pill=$('.nav-pill'),bar=$('.progress'),cue=$('.scroll-cue'),curLink=null;
   function movePill(a){
     if(!a){pill.style.opacity=0;return}
     pill.style.opacity=1;pill.style.width=a.offsetWidth+'px';pill.style.transform='translateX('+a.offsetLeft+'px)';
   }
-  var sections=links.map(function(a){return $(a.getAttribute('href'))});
+  // progress bar and scroll cue: only scrollY is read per frame; the page height is cached
+  var maxY=1,ticking=false;
+  function measure(){maxY=Math.max(1,document.documentElement.scrollHeight-innerHeight)}
   function onScroll(){
-    var y=window.scrollY,h=document.documentElement.scrollHeight-innerHeight;
-    bar.style.transform='scaleX('+(h>0?y/h:0)+')';
-    var mid=y+innerHeight*.4,cur=null;
-    sections.forEach(function(s,i){if(s&&s.offsetTop<=mid)cur=links[i]});
-    links.forEach(function(a){a.classList.toggle('active',a===cur)});
-    movePill(cur);
+    ticking=false;var y=scrollY;
+    bar.style.transform='scaleX('+Math.min(1,y/maxY)+')';
+    if(cue)cue.classList.toggle('gone',y>80);
   }
-  addEventListener('scroll',onScroll,{passive:true});addEventListener('resize',onScroll);onScroll();
+  function onResize(){measure();onScroll();movePill(curLink)}
+  addEventListener('scroll',function(){if(!ticking){ticking=true;requestAnimationFrame(onScroll)}},{passive:true});
+  addEventListener('resize',onResize);
+  if('ResizeObserver' in window)new ResizeObserver(onResize).observe(document.body);
+  measure();onScroll();
+  // active link: the section crossing a line 40% down the viewport
+  var sections=links.map(function(a){return $(a.getAttribute('href'))}),inView=[];
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){
+      es.forEach(function(e){inView[sections.indexOf(e.target)]=e.isIntersecting});
+      curLink=null;links.forEach(function(a,i){if(inView[i])curLink=a});
+      links.forEach(function(a){a.classList.toggle('active',a===curLink)});
+      movePill(curLink);
+    },{rootMargin:'-40% 0px -59% 0px'});
+    sections.forEach(function(s){if(s)io.observe(s)});
+  }
 
   /* ---------- hero signal field ---------- */
   (function(){
@@ -833,7 +885,7 @@ footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;paddin
     }
     var last=0,nextFlag=1200;
     function loop(now){
-      if(visible){
+      if(visible&&!motionOff){
         var dt=Math.min(now-last,50);last=now;t+=dt*.0006;
         nextFlag-=dt;
         if(nextFlag<=0){flag={li:Math.floor(Math.random()*lines.length),x:w*(.15+Math.random()*.7),amp:40+Math.random()*30,k:0,age:0};nextFlag=2800}
@@ -942,6 +994,7 @@ footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;paddin
     var el=$('#typed'),cmds=['build a roster generator','score picks against z-scores','serve VCT stats over FastAPI','dedupe the staging table'],ci=0,ch=0,del=false;
     if(reduce){el.textContent=cmds[0];return}
     (function tick(){
+      if(motionOff)return setTimeout(tick,400);
       var c=cmds[ci];
       if(!del){ch++;if(ch>c.length){del=true;return setTimeout(tick,1600)}}
       else{ch--;if(ch<0){del=false;ch=0;ci=(ci+1)%cmds.length;return setTimeout(tick,300)}}
@@ -970,14 +1023,11 @@ footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;paddin
 
   /* ---------- copy email ---------- */
   (function(){
-    var b=$('#copy'),t=$('#email');
-    function sel(){var r=document.createRange();r.selectNodeContents(t);var g=getSelection();g.removeAllRanges();g.addRange(r);b.textContent='Selected, press Ctrl+C'}
+    var b=$('#copy'),t=$('#email'),status=$('#copy-status');
+    function sel(){var r=document.createRange();r.selectNodeContents(t);var g=getSelection();g.removeAllRanges();g.addRange(r);b.textContent='Selected, press Ctrl+C';status.textContent='Email selected. Press Ctrl+C to copy it.'}
     b.addEventListener('click',function(){
-      try{navigator.clipboard.writeText(t.textContent).then(function(){b.textContent='Copied';setTimeout(function(){b.textContent='Copy email'},2200)},sel)}catch(e){sel()}
+      try{navigator.clipboard.writeText(t.textContent).then(function(){b.textContent='Copied';status.textContent='Email copied to clipboard.';setTimeout(function(){b.textContent='Copy email';status.textContent=''},2200)},sel)}catch(e){sel()}
     });
-    // hide the scroll cue once the visitor starts scrolling
-    var cue=$('.scroll-cue');
-    if(cue){var onS=function(){cue.classList.toggle('gone',scrollY>80)};addEventListener('scroll',onS,{passive:true});onS()}
     // hero email badge: copy, or fall back to opening the mail app
     $$('[data-copy]').forEach(function(btn){
       var hint=$('.hint',btn),addr=btn.getAttribute('data-copy');
@@ -1044,13 +1094,17 @@ footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;paddin
   cards.forEach(function(card,i){
     ScrollTrigger.create({trigger:card,start:'top 60%',end:'bottom 60%',onToggle:function(s){if(s.isActive){count.textContent=('0'+(i+1)).slice(-2);idx.forEach(function(a,j){a.classList.toggle('active',j===i)})}}});
     if(i<cards.length-1&&stackMQ.matches){
-      gsap.fromTo(card,{scale:1,filter:'brightness(1)'},{scale:.92,filter:'brightness(.6)',ease:'none',scrollTrigger:{trigger:cards[i+1],start:'top bottom',end:'top '+(110+(i+1)*14)+'px',scrub:true}});
+      // darken via an overlay's opacity; scrubbing filter:brightness repainted the whole card every frame
+      var dim=document.createElement('span');dim.className='pcard-dim';dim.setAttribute('aria-hidden','true');card.appendChild(dim);
+      gsap.timeline({scrollTrigger:{trigger:cards[i+1],start:'top bottom',end:'top '+(110+(i+1)*14)+'px',scrub:true}})
+        .fromTo(card,{scale:1},{scale:.92,ease:'none'},0)
+        .fromTo(dim,{opacity:0},{opacity:.4,ease:'none'},0);
     }
     gsap.from($('.visual .stage',card),{scale:.8,opacity:.3,ease:'none',scrollTrigger:{trigger:card,start:'top bottom',end:'top 40%',scrub:true}});
   });
 
-  // contact headline stretch
-  gsap.from('.contact .big em',{letterSpacing:'0.2em',ease:'none',scrollTrigger:{trigger:'.contact',start:'top bottom',end:'center center',scrub:true}});
+  // contact headline: slide the accent word into place (transform, not letter-spacing, so nothing re-lays out)
+  gsap.from('.contact .big em',{xPercent:25,opacity:.35,ease:'none',scrollTrigger:{trigger:'.contact',start:'top bottom',end:'center center',scrub:true}});
 
   addEventListener('load',function(){ScrollTrigger.refresh()});
 })();
@@ -1061,7 +1115,9 @@ footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;paddin
   var cv=document.getElementById('orb');if(!cv||!cv.getContext)return;
   var ctx=cv.getContext('2d'),root=document.documentElement;
   var reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var N=360,pts=[],ink,acc,size=0,visible=true,raf=0,t0=performance.now();
+  // clock advances only while animating, so pausing and resuming doesn't make the globe jump
+  var N=360,pts=[],ink,acc,size=0,visible=true,raf=0,clock=9000,last=0;
+  function still(){return root.classList.contains('motion-off')}
   for(var i=0;i<N;i++){
     var y=1-(i/(N-1))*2,r=Math.sqrt(1-y*y),th=i*2.399963;
     pts.push({x:Math.cos(th)*r,y:y,z:Math.sin(th)*r,sig:i%41===7});
@@ -1073,7 +1129,7 @@ footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;paddin
   }
   function draw(now){
     if(!size)return;
-    var a=(now-t0)*.00016,tilt=.42,ca=Math.cos(a),sa=Math.sin(a),ct=Math.cos(tilt),st=Math.sin(tilt);
+    var a=now*.00016,tilt=.42,ca=Math.cos(a),sa=Math.sin(a),ct=Math.cos(tilt),st=Math.sin(tilt);
     var c=size/2,R=size*.38;
     ctx.clearRect(0,0,size,size);
     // equator and meridian rings
@@ -1108,14 +1164,19 @@ footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;paddin
     }
     ctx.globalAlpha=1;
   }
-  function loop(now){draw(now);raf=visible&&!reduce?requestAnimationFrame(loop):0}
-  colors();resize();draw(t0+9000);
-  if('ResizeObserver' in window)new ResizeObserver(function(){resize();draw(performance.now())}).observe(cv);
-  document.addEventListener('themechange',function(){colors();draw(performance.now())});
+  function loop(now){
+    clock+=last?Math.min(now-last,50):0;last=now;draw(clock);
+    raf=visible&&!still()?requestAnimationFrame(loop):0;if(!raf)last=0;
+  }
+  function start(){if(visible&&!still()&&!raf)raf=requestAnimationFrame(loop)}
+  colors();resize();draw(clock);
+  if('ResizeObserver' in window)new ResizeObserver(function(){resize();draw(clock)}).observe(cv);
+  document.addEventListener('themechange',function(){colors();draw(clock)});
   if(reduce)return;
+  document.addEventListener('motionchange',start);
   if('IntersectionObserver' in window){
-    new IntersectionObserver(function(e){visible=e[0].isIntersecting;if(visible&&!raf)raf=requestAnimationFrame(loop)}).observe(cv);
-  }else raf=requestAnimationFrame(loop);
+    new IntersectionObserver(function(e){visible=e[0].isIntersecting;start()}).observe(cv);
+  }else start();
 })();
 </script>
 </body>

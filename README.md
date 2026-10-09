@@ -44,6 +44,7 @@ The site is a single static page with no build step. All markup, styles and scri
 - **Skills accordion:** opens on hover or click on desktop and stacks on mobile.
 - **One-click email copy:** in both the hero and the contact section.
 - **Theme toggle:** cycles through auto, light and dark modes and remembers your choice.
+- **Motion toggle:** pauses every looping animation (marquees, canvases, typing terminal) and remembers your choice.
 - **Scroll choreography:** word-by-word text reveals, smooth scrolling and a reading-progress bar.
 
 ## Tech stack
@@ -78,15 +79,18 @@ Third-party libraries load from public CDNs (cdnjs and jsDelivr). There are no n
 - Respects `prefers-color-scheme`, with a manual override.
 - Skip-to-content link, visible focus rings, semantic landmarks and ARIA labels on interactive controls.
 - Muted text is tuned for readable contrast in both themes.
-- Canvas animations pause when off-screen.
+- A motion toggle in the nav pauses all looping animation (WCAG 2.2.2).
+- The mobile menu keeps keyboard focus inside it while open; copy actions are announced to screen readers.
+- Canvas animations pause when off-screen. Scroll effects animate only `transform` and `opacity`.
 - Fully responsive, from 360px phones to wide desktop screens.
 
 ## Project structure
 
 ```
 portfolio/
-├── index.html   # The entire site: markup, styles and scripts
-└── README.md    # This file
+├── index.html     # The entire site: markup, styles and scripts
+├── og-image.png   # 1200×630 link-preview card for LinkedIn and other sites
+└── README.md      # This file
 ```
 
 ## Running locally
